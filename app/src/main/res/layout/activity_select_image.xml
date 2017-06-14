@@ -2,13 +2,15 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/item_bg">
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/iv_circle"
-        android:layout_width="65dp"
-        android:layout_height="65dp"
-        android:src="@mipmap/ic_launcher" />
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_gravity="center_horizontal"
+        android:src="@mipmap/test"
+        android:layout_marginTop="60dp"/>
 
     <Button
         android:layout_width="wrap_content"
@@ -16,14 +18,16 @@
         android:background="@color/lightblue"
         android:textSize="@dimen/text_size16"
         android:textColor="@color/white"
+        android:layout_gravity="center_horizontal"
         android:gravity="center"
         android:text="单选"
-        android:layout_marginTop="15dp"/>
+        android:layout_marginTop="50dp"/>
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@color/lightblue"
         android:textSize="@dimen/text_size16"
+        android:layout_gravity="center_horizontal"
         android:textColor="@color/white"
         android:gravity="center"
         android:text="多选"

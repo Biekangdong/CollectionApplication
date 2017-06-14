@@ -1,19 +1,21 @@
 package com.example.collectionapplication.camera;
 
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 
+import com.example.collectionapplication.BaseActivity;
 import com.example.collectionapplication.R;
 
 /**
  * Created by Administrator on 2017/6/14.
  */
 
-public class SelectImageActivity extends AppCompatActivity {
+public class SelectImageActivity extends BaseActivity {
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_select_image);
+    protected int getLayoutId() {
+        return R.layout.activity_select_image;
+    }
+    @Override
+    protected String setmToolbar() {
+        String toolbarTitle="布局选择";
+        return toolbarTitle;
     }
 }
