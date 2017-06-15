@@ -34,9 +34,8 @@ public class LayoutBrowserActivity extends BaseActivity implements View.OnClickL
 
 
     @Override
-    protected String setmToolbar() {
-        String toolbarTitle="布局选择";
-        return toolbarTitle;
+    protected void setmToolbar() {
+        toolbarTitle="网页";
     }
     @Override
     public void initView() {

@@ -13,6 +13,7 @@ import android.view.View;
 
 public abstract class BaseActivity extends AppCompatActivity implements  View.OnClickListener,BaseViewInterface{
     public Toolbar mToolbar;
+    public String toolbarTitle;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -20,6 +21,7 @@ public abstract class BaseActivity extends AppCompatActivity implements  View.On
         setContentView(getLayoutId());
         initView();
         initData();
+        setmToolbar();
         initToolBar();
     }
 
@@ -33,10 +35,10 @@ public abstract class BaseActivity extends AppCompatActivity implements  View.On
 
     }
 
-    protected abstract String setmToolbar();
+    protected abstract void setmToolbar();
 
     public  void initToolBar(){
-        mToolbar.setTitle(setmToolbar());
+        mToolbar.setTitle(toolbarTitle);
         mToolbar.setTitleTextColor(Color.WHITE);
         //设置导航菜单
         mToolbar.setNavigationIcon(R.drawable.back);

@@ -4,6 +4,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/item_bg">
+    <!--Toolbar-->
+    <include layout="@layout/activity_tool_bar"></include>
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/iv_circle"
         android:layout_width="80dp"
@@ -13,6 +15,7 @@
         android:layout_marginTop="60dp"/>
 
     <Button
+        android:id="@+id/btn_single_choose"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@color/lightblue"
@@ -23,6 +26,7 @@
         android:text="单选"
         android:layout_marginTop="50dp"/>
     <Button
+        android:id="@+id/btn_multi_choose"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@color/lightblue"

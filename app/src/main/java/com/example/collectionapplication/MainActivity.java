@@ -15,6 +15,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.example.collectionapplication.camera.SelectImageActivity;
 import com.example.collectionapplication.layout.LayoutMainActivity;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
@@ -24,7 +25,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ListView lvLeftMenu;
     private String[] lvs = {"List Item 01", "List Item 02", "List Item 03", "List Item 04"};
     private ArrayAdapter arrayAdapter;
-    View rl_layout;
+    View rl_layout,rl_camera;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -39,6 +40,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void initView() {
         mToolbar=(Toolbar) findViewById(R.id.toolbar);
         rl_layout=findViewById(R.id.rl_layout);
+        rl_camera=findViewById(R.id.rl_camera);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.dl_left);
         lvLeftMenu = (ListView) findViewById(R.id.lv_left_menu);
         initBar();
@@ -119,11 +121,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public void initData() {
         rl_layout.setOnClickListener(this);
+        rl_camera.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()){
+            case  R.id.rl_camera:
+                startActivity(new Intent(this, SelectImageActivity.class));
+                break;
            case  R.id.rl_layout:
                startActivity(new Intent(this, LayoutMainActivity.class));
             break;

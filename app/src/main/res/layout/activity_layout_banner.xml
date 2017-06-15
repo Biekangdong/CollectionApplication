@@ -4,6 +4,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/item_bg">
+    <!--Toolbar-->
+    <include layout="@layout/activity_tool_bar"></include>
     <com.youth.banner.Banner
         android:id="@+id/banner"
         android:layout_width="match_parent"

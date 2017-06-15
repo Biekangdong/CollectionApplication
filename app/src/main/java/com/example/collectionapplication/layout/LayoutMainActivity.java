@@ -29,9 +29,8 @@ public class LayoutMainActivity extends BaseActivity implements View.OnClickList
     }
 
     @Override
-    protected String setmToolbar() {
-        String toolbarTitle="布局选择";
-        return toolbarTitle;
+    protected void setmToolbar() {
+        toolbarTitle="布局选择";
     }
 
     @Override
@@ -46,7 +45,7 @@ public class LayoutMainActivity extends BaseActivity implements View.OnClickList
                 break;
             case R.id.rl_browser:
                 Intent n = new Intent(this, LayoutBrowserActivity.class);
-                String url="http://chat.baomihua6.com/Uploads/Seller/495/2017-05-16/591a9032a1837.mp4";
+                String url="http://192.168.0.137:809/video.html";
                 n.putExtra("url",url);
                 n.putExtra("title", "视频测试");
                 startActivity(n);

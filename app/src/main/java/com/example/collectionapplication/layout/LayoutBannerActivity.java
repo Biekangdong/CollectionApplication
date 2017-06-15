@@ -40,10 +40,10 @@ public class LayoutBannerActivity extends BaseActivity implements View.OnClickLi
         initBanner();
     }
     @Override
-    protected String setmToolbar() {
-        String toolbarTitle="布局选择";
-        return toolbarTitle;
+    protected void setmToolbar() {
+        toolbarTitle="轮播图";
     }
+
     @Override
     public void initData() {
         super.initData();
