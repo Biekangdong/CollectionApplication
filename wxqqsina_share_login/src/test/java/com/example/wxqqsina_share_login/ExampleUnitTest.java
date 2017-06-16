@@ -1,4 +1,4 @@
-package com.example.wxqq_pay_share_login;
+package com.example.wxqqsina_share_login;
 
 import org.junit.Test;
 

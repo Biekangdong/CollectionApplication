@@ -5,20 +5,21 @@ import android.view.View;
 
 import com.example.collectionapplication.BaseActivity;
 import com.example.collectionapplication.R;
+import com.example.collectionapplication.coordinator.LayoutCoordinatorActivity;
 
 /**
  * Created by Administrator on 2017/6/14.
  */
 
 public class LayoutMainActivity extends BaseActivity implements View.OnClickListener{
-    View rl_banner,rl_browser;
+    View rl_banner,rl_browser,rl_CoordinatorLayout;
 
     @Override
     public void initView() {
         super.initView();
         rl_banner=findViewById(R.id.rl_banner);
         rl_browser=findViewById(R.id.rl_browser);
-
+        rl_CoordinatorLayout=findViewById(R.id.rl_CoordinatorLayout);
     }
 
     @Override
@@ -26,6 +27,7 @@ public class LayoutMainActivity extends BaseActivity implements View.OnClickList
         super.initData();
         rl_banner.setOnClickListener(this);
         rl_browser.setOnClickListener(this);
+        rl_CoordinatorLayout.setOnClickListener(this);
     }
 
     @Override
@@ -49,6 +51,9 @@ public class LayoutMainActivity extends BaseActivity implements View.OnClickList
                 n.putExtra("url",url);
                 n.putExtra("title", "视频测试");
                 startActivity(n);
+                break;
+            case R.id.rl_CoordinatorLayout:
+                startActivity(new Intent(this,LayoutCoordinatorActivity.class));
                 break;
 
         }

@@ -13,27 +13,35 @@ import android.widget.Toast;
 
 import com.alipay.sdk.app.PayTask;
 import com.example.alipaywx_pay.test.PayResult;
+import com.tencent.mm.opensdk.modelpay.PayReq;
+import com.tencent.mm.opensdk.openapi.IWXAPI;
+import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private static final int SDK_PAY_FLAG = 1;
-    Button btn_pay;
-
+    Button btn_alipay,btn_wxpay;
+    private IWXAPI api;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        btn_pay = (Button) findViewById(R.id.btn_pay);
-        btn_pay.setOnClickListener(this);
+        btn_alipay = (Button) findViewById(R.id.btn_alipay);
+        btn_wxpay= (Button) findViewById(R.id.btn_wxpay);
+        btn_alipay.setOnClickListener(this);
+        btn_wxpay.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.btn_pay:
+            case R.id.btn_alipay:
                 String orderInfo="app_id=2015052600090779&biz_content=%7B%22timeout_express%22%3A%2230m%22%2C%22seller_id%22%3A%22%22%2C%22product_code%22%3A%22QUICK_MSECURITY_PAY%22%2C%22total_amount%22%3A%220.02%22%2C%22subject%22%3A%221%22%2C%22body%22%3A%22%E6%88%91%E6%98%AF%E6%B5%8B%E8%AF%95%E6%95%B0%E6%8D%AE%22%2C%22out_trade_no%22%3A%22314VYGIAGG7ZOYY%22%7D&charset=utf-8&method=alipay.trade.app.pay&sign_type=RSA2&timestamp=2016-08-15%2012%3A12%3A15&version=1.0&sign=MsbylYkCzlfYLy9PeRwUUIg9nZPeN9SfXPNavUCroGKR5Kqvx0nEnd3eRmKxJuthNUx4ERCXe552EV9PfwexqW%2B1wbKOdYtDIb4%2B7PL3Pc94RZL0zKaWcaY3tSL89%2FuAVUsQuFqEJdhIukuKygrXucvejOUgTCfoUdwTi7z%2BZzQ%3D";
                 alipay(orderInfo);
+                break;
+            case R.id.btn_wxpay:
+                wxPay();
                 break;
         }
     }
@@ -91,5 +99,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         payThread.start();
     }
 
+
+
+
+
+    public void wxPay(){
+        api = WXAPIFactory.createWXAPI(this, "你在微信开放平台创建的app的APPID");
+        //我将后端反给我的信息放到了WeiXinPay中，这步是获取数据
+        WeiXinPay weiXinPay = new WeiXinPay();
+
+        //这个在官网里就会看到，将你获取的信息赋给payReq，这块就是调起微信的关键
+        PayReq payReq = new PayReq();
+        payReq.appId = weiXinPay.getAppId();// appid
+        payReq.partnerId = weiXinPay.getPartnerId();// 微信支付分配的商户号
+        payReq.prepayId = weiXinPay.getPrepayId();// 预支付订单号，app服务器调用“统一下单”接口获取
+        payReq.packageValue = weiXinPay.getPackageValue();// 固定值Sign=WXPay，可以直接写死，服务器返回的也是这个固定值
+        payReq.nonceStr = weiXinPay.getNonceStr();// 随机字符串，不长于32位，服务器小哥会给咱生成
+        payReq.timeStamp = weiXinPay.getTimeStamp(); // 时间戳，app服务器小哥给出
+        payReq.sign = weiXinPay.getSign();// 签名，服务器小哥给出，他会根据：https://pay.weixin.qq.com/wiki/doc/api/app/app.php?chapter=4_3指导得到这个
+        api.sendReq(payReq);
+    }
 
 }
