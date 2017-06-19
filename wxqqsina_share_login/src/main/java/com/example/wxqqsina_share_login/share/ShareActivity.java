@@ -17,11 +17,13 @@ import android.widget.Toast;
 
 import com.example.wxqqsina_share_login.R;
 import com.sina.weibo.sdk.api.ImageObject;
-import com.sina.weibo.sdk.api.WeiboMessage;
+import com.sina.weibo.sdk.api.TextObject;
+import com.sina.weibo.sdk.api.WebpageObject;
+import com.sina.weibo.sdk.api.WeiboMultiMessage;
 import com.sina.weibo.sdk.api.share.BaseResponse;
 import com.sina.weibo.sdk.api.share.IWeiboHandler;
 import com.sina.weibo.sdk.api.share.IWeiboShareAPI;
-import com.sina.weibo.sdk.api.share.SendMessageToWeiboRequest;
+import com.sina.weibo.sdk.api.share.SendMultiMessageToWeiboRequest;
 import com.sina.weibo.sdk.api.share.WeiboShareSDK;
 import com.sina.weibo.sdk.constant.WBConstants;
 import com.tencent.connect.common.Constants;
@@ -36,6 +38,8 @@ import com.tencent.tauth.IUiListener;
 import com.tencent.tauth.Tencent;
 import com.tencent.tauth.UiError;
 
+import java.util.UUID;
+
 /**
  * Created by Administrator on 2017/6/16.
  */
@@ -44,6 +48,7 @@ public class ShareActivity extends AppCompatActivity implements IWeiboHandler.Re
     Button btn_share;
     private IWXAPI wxApi;
     private Tencent mTencent;// 新建Tencent实例用于调用分享方法
+    private IWeiboShareAPI mWeiboShareAPI;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -54,6 +59,22 @@ public class ShareActivity extends AppCompatActivity implements IWeiboHandler.Re
         wxApi.registerApp("微信ID");
         //QQ实例化
         mTencent = Tencent.createInstance("your APP ID", getApplicationContext());
+
+
+        // 创建微博分享接口实例
+        mWeiboShareAPI = WeiboShareSDK.createWeiboAPI(this, "APP_KEY");
+        // 注册第三方应用到微博客户端中，注册成功后该应用将显示在微博的应用列表中。
+        // 但该附件栏集成分享权限需要合作申请，详情请查看 Demo 提示
+        // NOTE：请务必提前注册，即界面初始化的时候或是应用程序初始化时，进行注册
+        mWeiboShareAPI.registerApp();
+        // 当 Activity 被重新初始化时（该 Activity 处于后台时，可能会由于内存不足被杀掉了），
+        // 需要调用 {@link IWeiboShareAPI#handleWeiboResponse} 来接收微博客户端返回的数据。
+        // 执行成功，返回 true，并调用 {@link IWeiboHandler.Response#onResponse}；
+        // 失败返回 false，不调用上述回调
+        if (savedInstanceState != null) {
+            mWeiboShareAPI.handleWeiboResponse(getIntent(), this);
+        }
+
 
         btn_share = (Button) findViewById(R.id.btn_share);
         btn_share.setOnClickListener(new View.OnClickListener() {
@@ -204,37 +225,30 @@ public class ShareActivity extends AppCompatActivity implements IWeiboHandler.Re
 
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    private IWeiboShareAPI mWeiboShareAPI;
-
     private void sinaShare() {
-        // 创建微博分享接口实例
-        mWeiboShareAPI = WeiboShareSDK.createWeiboAPI(this, "APP_KEY");
+        WebpageObject webpageObject = new WebpageObject(); //分享网页是这个
+        Bitmap thumb = BitmapFactory.decodeResource(this.getResources(), R.mipmap.ic_launcher);
+        webpageObject.setThumbImage(thumb); //注意，它会按照jpeg做85%的压缩，压缩后的大小不能超过32K
+        webpageObject.title = "测试title";//不能超过512
+        webpageObject.actionUrl = "http://news.sina.com.cn/c/2013-10-22/021928494669.shtml";// 不能超过512
+        webpageObject.description = "测试描述";//不能超过1024
+        webpageObject.identify = UUID.randomUUID().toString();//这个不知道做啥的
+        webpageObject.defaultText = "Webpage 默认文案";//这个也不知道做啥的
+        //上面这些，一条都不能少，不然就会出现分享失败，主要是接口调用失败，而不会通过activity返回错误的intent
 
-        // 注册第三方应用到微博客户端中，注册成功后该应用将显示在微博的应用列表中。
-        // 但该附件栏集成分享权限需要合作申请，详情请查看 Demo 提示
-        // NOTE：请务必提前注册，即界面初始化的时候或是应用程序初始化时，进行注册
-        mWeiboShareAPI.registerApp();
+        //下面这个，就是用户在分享网页的时候，自定义的微博内容
+        TextObject textObject = new TextObject();
+        textObject.text = "aaaaaaaaaaaaaaaaaaaaa";
+        WeiboMultiMessage msg = new WeiboMultiMessage();
+        msg.mediaObject = webpageObject;
+        msg.textObject = textObject;
 
-        // 当 Activity 被重新初始化时（该 Activity 处于后台时，可能会由于内存不足被杀掉了），
-        // 需要调用 {@link IWeiboShareAPI#handleWeiboResponse} 来接收微博客户端返回的数据。
-        // 执行成功，返回 true，并调用 {@link IWeiboHandler.Response#onResponse}；
-        // 失败返回 false，不调用上述回调
-        mWeiboShareAPI.handleWeiboResponse(getIntent(), this);
-//        if (savedInstanceState != null) {
-//            mWeiboShareAPI.handleWeiboResponse(getIntent(), this);
-//        }
-
-        WeiboMessage weiboMessage = new WeiboMessage();
-        ImageObject imageObject = new ImageObject();
-        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
-        imageObject.setImageObject(bitmap);
-        weiboMessage.mediaObject = imageObject;
-        SendMessageToWeiboRequest request = new SendMessageToWeiboRequest();
+        SendMultiMessageToWeiboRequest request = new SendMultiMessageToWeiboRequest();
         request.transaction = String.valueOf(System.currentTimeMillis());
-        request.message = weiboMessage;
+        request.multiMessage = msg;
+
         mWeiboShareAPI.sendRequest(ShareActivity.this, request);
     }
-
 
     @Override
     protected void onNewIntent(Intent intent) {
@@ -258,13 +272,13 @@ public class ShareActivity extends AppCompatActivity implements IWeiboHandler.Re
         if (baseResp != null) {
             switch (baseResp.errCode) {
                 case WBConstants.ErrorCode.ERR_OK:
-                    Toast.makeText(this, "success", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, "成功", Toast.LENGTH_LONG).show();
                     break;
                 case WBConstants.ErrorCode.ERR_CANCEL:
-                    Toast.makeText(this, "cancel", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, "取消", Toast.LENGTH_LONG).show();
                     break;
                 case WBConstants.ErrorCode.ERR_FAIL:
-                    Toast.makeText(this, "Error Message: " + baseResp.errMsg,
+                    Toast.makeText(this, "失败" + baseResp.errMsg,
                             Toast.LENGTH_LONG).show();
                     break;
             }

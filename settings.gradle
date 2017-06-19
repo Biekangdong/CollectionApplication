@@ -1,1 +1,1 @@
-include ':app', ':wxqqsina_share_login', ':umeng_share_login_count', ':jpush_project', ':wxalipay_pay', ':qr_code_zxing', ':StickyNavLayout'
+include ':app', ':wxqqsina_share_login', ':umeng_share_login_count', ':jpush_project', ':wxalipay_pay', ':StickyNavLayout', ':update_app', ':QrCodeScan', ':xrecyclerview-master'
